@@ -1,7 +1,7 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const money = n => new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(Number(n)||0);
-  const DEMO_USERS = { admin: 'CavaAdmin26!', cava1: 'CavaVenta1!', cava2: 'CavaVenta2!' };
+  const DEMO_USERS = { admin: 'CavaAdmin26!', cava1: 'CavaVenta1!', cava2: 'carlosjimenezcn' };
   const keys = {sales:'cava_sales_v1', recipes:'cava_recipes_v1'};
   let currentUser = '', activeCategory = 'Todos', cart = [], sales = [];
   let ingredients = [{name:'Leche',cost:2},{name:'Café',cost:4},{name:'Vaso térmico',cost:2},{name:'Otros insumos',cost:1.5}];
