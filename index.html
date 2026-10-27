@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f5e9">
+  <title>Cava · Gestión de cafetería</title>
+  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main id="login-screen" class="login-screen">
+    <section class="login-card">
+      <div class="login-brand">
+        <img src="assets/logo.png" alt="Cava Cafetería" class="login-logo" onerror="this.style.display='none'">
+        <div class="monogram">cava</div>
+        <p class="eyebrow">CAFETERÍA · PANEL DE GESTIÓN</p>
+      </div>
+      <img src="assets/pp.png" alt="" class="profile-image" onerror="this.style.display='none'">
+      <h1>Bienvenido a Cava</h1>
+      <p class="muted">Ingresa para administrar ventas y costos.</p>
+      <form id="login-form" class="stack">
+        <label for="username">Usuario</label>
+        <input id="username" autocomplete="username" required placeholder="Tu usuario">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña">
+        <p id="login-error" class="error" role="alert"></p>
+        <button class="button button-primary button-wide" type="submit">Iniciar sesión <span>↗</span></button>
+      </form>
+      <p class="login-note">Prototipo inicial · configura autenticación segura antes de usarlo con datos reales.</p>
+    </section>
+  </main>
+
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand-lockup">
+        <img src="assets/logo.png" alt="Cava" class="sidebar-logo" onerror="this.style.display='none'">
+        <div><strong>cava</strong><span>GESTIÓN</span></div>
+      </div>
+      <div class="nav-label">OPERACIÓN</div>
+      <button class="nav-link active" data-view="pos"><span class="nav-icon">▦</span> Punto de venta</button>
+      <button class="nav-link" data-view="costs"><span class="nav-icon">◫</span> Costos de productos</button>
+      <div class="sidebar-bottom">
+        <div class="user-chip"><span class="avatar">C</span><div><strong id="current-user">Usuario</strong><small>Sesión activa</small></div></div>
+        <button id="logout-button" class="nav-link logout"><span class="nav-icon">↪</span> Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><p class="eyebrow">CAVA CAFETERÍA</p><h1 id="page-title">Punto de venta</h1></div>
+        <div class="topbar-right"><span id="today-label" class="date-pill"></span><span class="status-dot"></span></div>
+      </header>
+
+      <section id="pos-view" class="view">
+        <div class="summary-grid">
+          <article class="summary-card"><span class="summary-label">Ventas registradas hoy</span><strong id="today-sales">$0.00</strong><small>Importe acumulado</small></article>
+          <article class="summary-card"><span class="summary-label">Operaciones de hoy</span><strong id="today-orders">0</strong><small>Tickets registrados</small></article>
+          <article class="summary-card accent-card"><span class="summary-label">Productos en el menú</span><strong id="menu-count">36</strong><small>En 9 categorías</small></article>
+        </div>
+        <div class="pos-layout">
+          <section class="panel product-panel">
+            <div class="section-heading"><div><p class="eyebrow">MENÚ</p><h2>Selecciona productos</h2></div><input id="product-search" class="search-input" placeholder="Buscar producto…"></div>
+            <div id="category-filters" class="category-filters"></div>
+            <div id="product-grid" class="product-grid"></div>
+          </section>
+          <aside class="panel order-panel">
+            <div class="section-heading"><div><p class="eyebrow">NUEVA OPERACIÓN</p><h2>Tu cuenta</h2></div><span class="cart-icon">＋</span></div>
+            <div class="order-meta">
+              <label>Canal de venta<select id="sale-channel"><option value="Mostrador">Mostrador</option><option value="Delivery">Delivery</option><option value="Recoger">Para recoger</option></select></label>
+              <label>Método de pago<select id="payment-method"><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option><option>Plataforma</option></select></label>
+            </div>
+            <div id="cart-items" class="cart-items empty-cart"><div class="empty-symbol">＋</div><strong>Tu cuenta está vacía</strong><span>Agrega productos del menú para comenzar.</span></div>
+            <div class="order-footer"><div class="total-row"><span>Total</span><strong id="cart-total">$0.00</strong></div><button id="complete-sale" class="button button-primary button-wide" disabled>Registrar venta <span>↗</span></button><button id="clear-cart" class="button button-quiet button-wide">Vaciar cuenta</button><p class="tiny-note">El registro se guarda en este navegador. Exporta el CSV para respaldarlo.</p></div>
+          </aside>
+        </div>
+        <section class="panel history-panel">
+          <div class="section-heading"><div><p class="eyebrow">REGISTRO</p><h2>Ventas recientes</h2></div><button id="export-csv" class="button button-outline">Descargar CSV ↓</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Fecha y hora</th><th>Usuario</th><th>Productos</th><th>Canal</th><th>Pago</th><th class="align-right">Total</th></tr></thead><tbody id="sales-history"></tbody></table></div>
+          <p id="no-sales" class="empty-table">Aún no hay ventas registradas.</p>
+        </section>
+      </section>
+
+      <section id="costs-view" class="view hidden">
+        <div class="intro-banner"><div><p class="eyebrow">RECETARIO Y RENTABILIDAD</p><h2>Conoce el costo real de cada producto.</h2><p>Desglosa insumos, calcula costos unitarios y simula la comisión de delivery.</p></div><div class="banner-mark">c.</div></div>
+        <div class="costs-layout">
+          <section class="panel">
+            <div class="section-heading"><div><p class="eyebrow">FICHA DE PRODUCTO</p><h2>Costeo de receta</h2></div></div>
+            <label>Producto<select id="cost-product"></select></label>
+            <div class="field-grid"><label>Precio publicado (MXN)<input id="cost-price" type="number" min="0" step=".01" value="65"></label><label>Comisión delivery (%)<input id="delivery-fee" type="number" min="0" max="100" step=".1" value="30"></label></div>
+            <div class="section-heading subheading"><div><h3>Insumos por porción</h3><p class="muted">Ingresa el costo utilizado en una unidad del producto.</p></div><button id="add-ingredient" class="button button-outline button-small">＋ Insumo</button></div>
+            <div class="ingredient-head"><span>Concepto</span><span>Costo por porción</span><span></span></div>
+            <div id="ingredients-list"></div>
+            <div class="cost-total-line"><span>Costo total de insumos</span><strong id="ingredient-total">$0.00</strong></div>
+            <div class="button-row"><button id="save-recipe" class="button button-primary">Guardar ficha</button><button id="reset-recipe" class="button button-quiet">Restablecer</button></div>
+          </section>
+          <aside class="cost-side">
+            <section class="panel result-panel"><p class="eyebrow">RESULTADO ESTIMADO</p><span class="result-label">Utilidad después de insumos y comisión</span><strong id="delivery-profit" class="profit-number">$0.00</strong><div class="result-divider"></div><div class="result-row"><span>Precio publicado</span><strong id="result-price">$65.00</strong></div><div class="result-row"><span>Costo de insumos</span><strong id="result-cost">$0.00</strong></div><div class="result-row"><span>Comisión delivery</span><strong id="result-fee">$19.50</strong></div><div class="result-row"><span>Margen estimado en delivery</span><strong id="result-margin">70.0%</strong></div><p class="tiny-note">No incluye impuestos, nómina, renta, mermas ni otros gastos indirectos.</p></section>
+            <section class="panel helper-panel"><p class="eyebrow">HERRAMIENTA AUXILIAR</p><h2>Costo por unidad</h2><p class="muted">Convierte el precio de un paquete en costo por pieza o por unidad de medida.</p><label>Nombre del insumo<input id="unit-name" value="Vaso térmico" placeholder="Ej. Vaso térmico"></label><div class="field-grid"><label>Precio del paquete ($)<input id="package-price" type="number" min="0" step=".01" value="50"></label><label>Contenido del paquete<input id="package-units" type="number" min=".001" step=".001" value="25"></label></div><label>Unidad de contenido<select id="package-unit"><option value="piezas">piezas</option><option value="gramos">gramos</option><option value="mililitros">mililitros</option><option value="porciones">porciones</option></select></label><div class="unit-result"><span>Costo por unidad</span><strong id="unit-cost">$2.00</strong></div><button id="apply-unit-cost" class="button button-outline button-wide">Agregar a la receta</button></section>
+          </aside>
+        </div>
+      </section>
+      <footer class="app-footer">CAVA · Una pausa, bien hecha. <span>Herramienta interna de operación</span></footer>
+    </main>
+  </div>
+  <script src="js/menu.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
